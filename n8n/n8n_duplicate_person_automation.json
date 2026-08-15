@@ -1,0 +1,198 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "duplicate-check",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "fe040962-56d8-487b-aa21-2a7fac163787",
+      "name": "Webhook",
+      "webhookId": "23d2bb2c-6002-4d5c-a19a-e057caeeaa4d"
+    },
+    {
+      "parameters": {
+        "options": {
+          "headerRow": true
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        32
+      ],
+      "id": "1f2be433-9411-4241-842d-1f6bed1b047b",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5000/check-duplicate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{ $json.name }}\",\n  \"email\": \"{{ $json.email }}\",\n  \"phone\": \"{{ $json.phone }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        352,
+        32
+      ],
+      "id": "3dd6a4c0-dc93-49c1-9f12-389c31998eaf",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "cb86368a-0070-4923-99ad-f5d851f76863",
+              "leftValue": "=={{ String($json.duplicate).toLowerCase() }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        576,
+        32
+      ],
+      "id": "e9731f5d-a31d-49ed-bb67-6d09c642595e",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "fromEmail": "sourabh.singhrj@gmail.com",
+        "toEmail": "sourabh.singhrj3@gmail.com",
+        "subject": "Duplicate Person Detected",
+        "emailFormat": "text",
+        "text": "=A duplicate person has been detected.\n\nName: {{ $json.existing_name }}\nEmail: {{ $json.existing_email }}\nPhone: {{ $json.existing_phone }}\nPerson ID: {{ $json.person_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        800,
+        -64
+      ],
+      "id": "3902a945-4369-4d24-a5ea-0b8015bf4039",
+      "name": "Send an Email",
+      "webhookId": "3435013e-de05-40bd-812c-fb07e635c71c",
+      "credentials": {
+        "smtp": {
+          "id": "OLfpLZILnqVoSBMd",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5000/add-person",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{ $json.name }}\",\n  \"email\": \"{{ $json.email }}\",\n  \"phone\": \"{{ $json.phone }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        800,
+        128
+      ],
+      "id": "c323c0ad-80eb-43c5-af41-d402dc32d628",
+      "name": "HTTP Request1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "7cfe48fc-b4af-4369-82c0-fc708f25f6c8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5f0c9ee0ef1d2411a3cf5286bb3879ba358db0cccd8d58ed9496abc7010b3897"
+  },
+  "nodeGroups": [],
+  "id": "pZIkc26PsTZVlTm1",
+  "tags": []
+}
