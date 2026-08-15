@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Audio Submission</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 18px;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .recording-controls {
+            margin-top: 15px;
+        }
+
+        #recordingStatus {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        #audioPreview {
+            width: 100%;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Audio Submission</h1>
+
+    <form id="audioForm">
+
+        <!-- Name -->
+        <div class="form-group">
+            <label for="name">Name</label>
+
+            <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter your name"
+                required
+            >
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+
+            <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="Enter your phone number"
+                required
+            >
+        </div>
+
+        <!-- Audio Upload -->
+        <div class="form-group">
+
+            <label for="audioFile">
+                Upload Audio
+            </label>
+
+            <input
+                type="file"
+                id="audioFile"
+                name="audio"
+                accept="audio/*"
+            >
+
+        </div>
+
+        <hr>
+
+        <!-- Browser Recording -->
+
+        <h3>Or Record Audio</h3>
+
+        <div class="recording-controls">
+
+            <button
+                type="button"
+                id="startRecording"
+            >
+                Start Recording
+            </button>
+
+            <button
+                type="button"
+                id="stopRecording"
+                disabled
+            >
+                Stop Recording
+            </button>
+
+        </div>
+
+        <div id="recordingStatus">
+            Not recording
+        </div>
+
+        <audio
+            id="audioPreview"
+            controls
+            hidden
+        ></audio>
+
+        <br>
+
+        <button type="submit">
+            Submit Audio
+        </button>
+
+    </form>
+
+    <script src="{{ url_for('static', filename='js/recorder.js') }}"></script>
+
+</body>
+</html>
