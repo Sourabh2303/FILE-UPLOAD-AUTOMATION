@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+env/
+myenv/
+.venv/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Audio recordings
+audio app/uploads/*
+!audio app/uploads/.gitkeep
+
+# Temporary test files
+duplicate_test.csv
+documents_test.csv
+test_audio.wav
+
+# n8n/local files
+.n8n/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
